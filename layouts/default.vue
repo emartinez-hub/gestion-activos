@@ -1,18 +1,51 @@
 <template>
-  <v-layout class="rounded rounded-md">
-    <v-navigation-drawer>
-      <v-list>
-        <v-list-item title="Navigation drawer"></v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+  <v-card>
+    <v-layout>
+      <v-app-bar>
+        <v-app-bar-nav-icon
+          variant="text"
+          @click.stop="drawer = !drawer"
+        ></v-app-bar-nav-icon>
 
-    <v-app-bar title="Application bar"></v-app-bar>
+        <v-toolbar-title>My files</v-toolbar-title>
 
-    <v-main
-      class="d-flex align-center justify-center bg-main"
-      style="min-height: 300px"
-    >
-      <slot />
-    </v-main>
-  </v-layout>
+        <v-spacer></v-spacer>
+
+        <template v-if="$vuetify.display.mdAndUp">
+          <v-btn icon="mdi-magnify" variant="text"></v-btn>
+
+          <v-btn icon="mdi-filter" variant="text"></v-btn>
+        </template>
+
+        <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
+      </v-app-bar>
+
+      <v-navigation-drawer
+        v-model="drawer"
+        :location="$vuetify.display.mobile ? 'bottom' : undefined"
+        temporary
+      >
+        <v-list :items="items"></v-list>
+      </v-navigation-drawer>
+
+      <v-main style="height: 500px">
+        <slot />
+      </v-main>
+    </v-layout>
+  </v-card>
 </template>
+
+<script lang="ts" setup>
+const drawer = ref(true);
+const group = ref(null);
+const items = ref([
+  { title: 'Foo', value: 'foo' },
+  { title: 'Bar', value: 'bar' },
+  { title: 'Fizz', value: 'fizz' },
+  { title: 'Buzz', value: 'buzz' },
+]);
+
+watch(group, () => {
+  drawer.value = false;
+});
+</script>
